@@ -1,25 +1,30 @@
 import React from 'react'
-import logo from './logo.svg'
 import './App.css'
+import Screens from './screens'
+import { Card } from 'react-bootstrap'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+function Header () {
+  return (
+    <div className="d-flex justify-content-center w-100 p-3 position-fixed" style={{ backgroundColor: '#000', zIndex: 9999 }}>
+      <Card.Img variant="top" style={{ width: 200, height: null }} src={require('../src/screens/Main/images/logo.jpg')} />
+    </div>
+  )
+}
 
 function App () {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <div style={{paddingBottom: 140}}></div>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Screens.Main} />
+          <Route exact path="/menu" component={Screens.Menu} />
+        </Switch>
+      </Router>
+    </>
   )
 }
 
