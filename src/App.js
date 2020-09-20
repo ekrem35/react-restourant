@@ -17,13 +17,16 @@ function App () {
   return (
     <>
       <Header />
-      <div style={{paddingBottom: 140}}></div>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Screens.Main} />
-          <Route exact path="/menu" component={Screens.Menu} />
-        </Switch>
-      </Router>
+      <div style={{ paddingBottom: 140 }}></div>
+      <div className="container">
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Screens.Main} />
+            <Route exact path="/menu" component={Screens.Menu} />
+            <Route exact path="/menu/sub" component={Screens.SubMenu} />
+          </Switch>
+        </Router>
+      </div>
     </>
   )
 }
