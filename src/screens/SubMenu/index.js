@@ -5,20 +5,24 @@ import React, { useState } from 'react'
 import { Card, Button } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useHistory } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { addItem } from '../../redux/actions'
 
 type Props = {
-    location: {
-        state: {
-            dataSource: Array,
-            caption: String,
-            selectedItem: Object,
-            others: Array
-        }
+  location: {
+    state: {
+      dataSource: Array,
+      caption: String,
+      selectedItem: Object,
+      others: Array,
+      mainPrice: Number
     }
+  },
+  add: (item: Object) => void
 }
 
-function SubMenu (props: Props) {
-  const { dataSource: menus, selectedItem } = props.location.state
+function SubMenu(props: Props) {
+  const { dataSource: menus, selectedItem, mainPrice } = props.location.state
   const [selected, setSelected] = useState(0)
   const history = useHistory()
   return (
@@ -50,8 +54,13 @@ function SubMenu (props: Props) {
                         <Card.Body>
                           <Card.Text>{iter.name}</Card.Text>
                           <Button variant="primary" onClick={() => {
-                            return true
-                          }}>+</Button>
+                            iter.mainPrice = mainPrice
+                            props.add(iter)
+                            if (menus[index + 1]) {
+                                setSelected(selected + 1)
+                            }
+                          }
+                          }>+</Button>
                         </Card.Body>
                       </Card>)
                     })
@@ -66,4 +75,8 @@ function SubMenu (props: Props) {
   )
 }
 
-export default SubMenu
+const mapDispatchToProps = dispatch => ({
+  add: (item) => dispatch(addItem(item))
+})
+
+export default connect(undefined, mapDispatchToProps)(SubMenu)

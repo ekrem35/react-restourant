@@ -6,6 +6,8 @@ import { Card, Button } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles.css'
 import { useHistory } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { deleteItem, updateItem, addItem, deleteAll } from '../../redux/actions'
 
 type Props = {
   location: {
@@ -13,13 +15,16 @@ type Props = {
       dataSource: Array,
       caption: String,
       others: Array
-    }
-  }
+    },
+  },
+  add: (item: Object) => void,
+  deleteAll: () => void
 }
 
-function Menu (props: Props) {
+function Menu(props: Props) {
   const history = useHistory()
   const { dataSource: menus, caption, others } = props.location.state
+  console.log(menus[0])
   return (
     <>
       <div>
@@ -39,7 +44,15 @@ function Menu (props: Props) {
                   item.subMenus.map(filterKey => {
                     subMenuDataSource.push(others.filter(iter => iter.key === filterKey)[0])
                   })
-                  history.push({ pathname: '/menu/sub', state: { dataSource: subMenuDataSource, selectedItem: item, others } })
+                  props.deleteAll()
+                  history.push({
+                    pathname: '/menu/sub', state:
+                    {
+                      dataSource: subMenuDataSource, selectedItem: item, others, mainPrice: item.price || 0
+                    }
+                  })
+                } else {
+                  props.add(item);
                 }
               }}>Menüyü seç</Button>
             </Card.Body>
@@ -49,4 +62,12 @@ function Menu (props: Props) {
   )
 }
 
-export default Menu
+
+const mapDispatchToProps = dispatch => ({
+  add: (item) => dispatch(addItem(item)),
+  update: (item, index) => dispatch(updateItem(item, index)),
+  delete: (index) => dispatch(deleteItem(index)),
+  deleteAll: () => dispatch(deleteAll())
+})
+
+export default connect(undefined, mapDispatchToProps)(Menu)
